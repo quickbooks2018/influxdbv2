@@ -22,6 +22,8 @@ docker run --name influxdb -id --network monitoring --restart unless-stopped -p 
 ```
 
 - Grafana
+- https://grafana.com/docs/grafana/latest/setup-grafana/configure-docker/
+
 ```grafana
 docker run --name grafana -p 8080:3000 --network monitoring -v grafana:/var/lib/grafana:rw --restart unless-stopped -id grafana/grafana:9.3.2
 ```
