@@ -16,6 +16,8 @@ docker run --name influxdb -id --network monitoring --restart unless-stopped -p 
       -e DOCKER_INFLUXDB_INIT_BUCKET=telegraf \
       -e DOCKER_INFLUXDB_INIT_RETENTION=1w \
       -e DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my-super-secret-auth-token \
+      -e DOCKER_INFLUXDB_INIT_PORT=8086 \
+      -e DOCKER_INFLUXDB_INIT_HOST=influxdb \
       influxdb:2.6.0
 ```
 
@@ -35,7 +37,8 @@ DOCKER_INFLUXDB_INIT_ADMIN_TOKEN='my-super-secret-auth-token'
 DOCKER_INFLUXDB_INIT_ORG='cloudgeeks'
 DOCKER_INFLUXDB_INIT_BUCKET='telegraf'
 SERVER="${HOSTNAME}"-"${HOSTIP}"
-INFLUXDB_ENDPOINT='influxdb'
+DOCKER_INFLUXDB_INIT_HOST='influxdb'
+DOCKER_INFLUXDB_INIT_PORT='8086'
 
 export HOSTNAME
 export HOSTIP
@@ -44,7 +47,8 @@ export INFLUX_TOKEN
 export DOCKER_INFLUXDB_INIT_ADMIN_TOKEN
 export DOCKER_INFLUXDB_INIT_ORG
 export DOCKER_INFLUXDB_INIT_BUCKET
-export INFLUXDB_ENDPOINT
+export DOCKER_INFLUXDB_INIT_HOST
+export DOCKER_INFLUXDB_INIT_PORT
 
 # Telegraf Setup
 cat << EOF > telegraf.conf
@@ -66,7 +70,7 @@ cat << EOF > telegraf.conf
  ## Multiple URLs can be specified for a single cluster, only ONE of the
  ## urls will be written to each interval.
  ## urls exp: http://127.0.0.1:8086
- urls = ["http://${INFLUXDB_ENDPOINT}:8086"]
+ urls = ["http://${DOCKER_INFLUXDB_INIT_HOST}:${DOCKER_INFLUXDB_INIT_PORT}"]
 
  ## Token for authentication.
  token = "$DOCKER_INFLUXDB_INIT_ADMIN_TOKEN"
@@ -109,9 +113,11 @@ docker run -id --name=telegraf --network=monitoring --restart unless-stopped \
 	-e HOST_VAR=/hostfs/var \
 	-e HOST_RUN=/hostfs/run \
 	-e HOST_MOUNT_PREFIX=/hostfs \
-    -e DOCKER_INFLUXDB_INIT_ORG="$DOCKER_INFLUXDB_INIT_ORG" \
-    -e DOCKER_INFLUXDB_INIT_BUCKET="$DOCKER_INFLUXDB_INIT_BUCKET" \
-    -e DOCKER_INFLUXDB_INIT_ADMIN_TOKEN="$DOCKER_INFLUXDB_INIT_ADMIN_TOKEN" \
+  -e DOCKER_INFLUXDB_INIT_ORG="$DOCKER_INFLUXDB_INIT_ORG" \
+  -e DOCKER_INFLUXDB_INIT_BUCKET="$DOCKER_INFLUXDB_INIT_BUCKET" \
+  -e DOCKER_INFLUXDB_INIT_ADMIN_TOKEN="$DOCKER_INFLUXDB_INIT_ADMIN_TOKEN" \
+  -e DOCKER_INFLUXDB_INIT_PORT="$DOCKER_INFLUXDB_INIT_PORT"
+  -e DOCKER_INFLUXDB_INIT_HOST="$DOCKER_INFLUXDB_INIT_HOST"
 	telegraf:1.25.0
 # End
 ```
