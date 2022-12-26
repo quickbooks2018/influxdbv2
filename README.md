@@ -23,7 +23,7 @@ docker run --name influxdb -id --network monitoring --restart unless-stopped -p 
 
 - Grafana
 ```grafana
-docker run --name grafana -p 8080:3000 --network monitoring --restart unless-stopped -id grafana/grafana:9.3.2
+docker run --name grafana -p 8080:3000 --network monitoring -v grafana:/var/lib/grafana:rw --restart unless-stopped -id grafana/grafana:9.3.2
 ```
 
 - Telegraf Agent in docker container
