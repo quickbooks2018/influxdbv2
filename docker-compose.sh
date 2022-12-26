@@ -21,6 +21,7 @@ services:
   influxdb:
     container_name: influxdb
     image: influxdb:2.6.0
+    restart: unless-stopped
     volumes:
       - influxdb-storage:/var/lib/influxdb2:rw
     environment:
@@ -33,13 +34,13 @@ services:
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
       - DOCKER_INFLUXDB_INIT_PORT=${DOCKER_INFLUXDB_INIT_PORT}
       - DOCKER_INFLUXDB_INIT_HOST=${DOCKER_INFLUXDB_INIT_HOST}
-    restart: unless-stopped
     ports:
       - 8086:8086
 
   telegraf:
     container_name: telegraf
     image: telegraf:1.25.0
+    restart: unless-stopped
     volumes:
       - ${PWD}/telegraf.conf:/etc/telegraf/telegraf.conf:rw
     environment:
@@ -55,6 +56,7 @@ services:
   grafana:
     container_name: grafana
     image: grafana/grafana:latest
+    restart: unless-stopped
     volumes:
       - grafana-storage:/var/lib/grafana:rw
     depends_on:
