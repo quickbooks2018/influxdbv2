@@ -22,7 +22,7 @@ export DOCKER_INFLUXDB_INIT_PORT
 
 # Telegraf Setup
 
-cat << EOF > ${PWD}telegraf.conf
+cat << EOF > ${PWD}/telegraf.conf
  [global_tags]
 [agent]
   interval = "60s"
