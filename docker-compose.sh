@@ -46,12 +46,12 @@ services:
       - ${PWD}/telegraf.conf:/etc/telegraf/telegraf.conf:rw
       -v /:/hostfs:ro
     environment:
-      -e HOST_ETC=/hostfs/etc
-      -e HOST_PROC=/hostfs/proc
-      -e HOST_SYS=/hostfs/sys
-      -e HOST_VAR=/hostfs/var
-      -e HOST_RUN=/hostfs/run
-      -e HOST_MOUNT_PREFIX=/hostfs
+      - HOST_ETC=/hostfs/etc
+      - HOST_PROC=/hostfs/proc
+      - HOST_SYS=/hostfs/sys
+      - HOST_VAR=/hostfs/var
+      - HOST_RUN=/hostfs/run
+      - HOST_MOUNT_PREFIX=/hostfs
       - DOCKER_INFLUXDB_INIT_ORG=${DOCKER_INFLUXDB_INIT_ORG}
       - DOCKER_INFLUXDB_INIT_BUCKET=${DOCKER_INFLUXDB_INIT_BUCKET}
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
