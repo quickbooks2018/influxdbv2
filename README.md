@@ -39,7 +39,7 @@ DOCKER_INFLUXDB_INIT_ADMIN_TOKEN='my-super-secret-auth-token'
 DOCKER_INFLUXDB_INIT_ORG='cloudgeeks'
 DOCKER_INFLUXDB_INIT_BUCKET='telegraf'
 SERVER="${HOSTNAME}"-"${HOSTIP}"
-DOCKER_INFLUXDB_INIT_HOST='influxdb'
+DOCKER_INFLUXDB_INIT_HOST='172.31.21.248'
 DOCKER_INFLUXDB_INIT_PORT='8086'
 
 export HOSTNAME
@@ -53,7 +53,7 @@ export DOCKER_INFLUXDB_INIT_HOST
 export DOCKER_INFLUXDB_INIT_PORT
 
 # Telegraf Setup
-cat << EOF > telegraf.conf
+cat << EOF > ${PWD}/telegraf.conf
  [global_tags]
 [agent]
   interval = "60s"
@@ -89,7 +89,7 @@ cat << EOF > telegraf.conf
   report_active = false
 [[inputs.disk]]
   ignore_fs = ["tmpfs", "devtmpfs", "devfs", "iso9660", "overlay", "aufs", "squashfs"]
-[[inputs.docker]]  
+[[inputs.docker]]
  endpoint = "unix:///var/run/docker.sock"
 container_name_include = []
 container_name_exclude = []
@@ -107,20 +107,20 @@ chmod 666 /var/run/docker.sock
 
 docker run -id --name=telegraf --network=monitoring --restart unless-stopped \
     -v /var/run/docker.sock:/var/run/docker.sock \
-	-v $PWD/telegraf.conf:/etc/telegraf/telegraf.conf:ro \
-	-v /:/hostfs:ro \
-	-e HOST_ETC=/hostfs/etc \
-	-e HOST_PROC=/hostfs/proc \
-	-e HOST_SYS=/hostfs/sys \
-	-e HOST_VAR=/hostfs/var \
-	-e HOST_RUN=/hostfs/run \
-	-e HOST_MOUNT_PREFIX=/hostfs \
-  -e DOCKER_INFLUXDB_INIT_ORG="$DOCKER_INFLUXDB_INIT_ORG" \
-  -e DOCKER_INFLUXDB_INIT_BUCKET="$DOCKER_INFLUXDB_INIT_BUCKET" \
-  -e DOCKER_INFLUXDB_INIT_ADMIN_TOKEN="$DOCKER_INFLUXDB_INIT_ADMIN_TOKEN" \
-  -e DOCKER_INFLUXDB_INIT_PORT="$DOCKER_INFLUXDB_INIT_PORT" \
-  -e DOCKER_INFLUXDB_INIT_HOST="$DOCKER_INFLUXDB_INIT_HOST" \
-	telegraf:1.25.0
+	  -v $PWD/telegraf.conf:/etc/telegraf/telegraf.conf:ro \
+    -v /:/hostfs:ro \
+    -e HOST_ETC=/hostfs/etc \
+    -e HOST_PROC=/hostfs/proc \
+    -e HOST_SYS=/hostfs/sys \
+    -e HOST_VAR=/hostfs/var \
+    -e HOST_RUN=/hostfs/run \
+    -e HOST_MOUNT_PREFIX=/hostfs \
+    -e DOCKER_INFLUXDB_INIT_ORG="$DOCKER_INFLUXDB_INIT_ORG" \
+    -e DOCKER_INFLUXDB_INIT_BUCKET="$DOCKER_INFLUXDB_INIT_BUCKET" \
+    -e DOCKER_INFLUXDB_INIT_ADMIN_TOKEN="$DOCKER_INFLUXDB_INIT_ADMIN_TOKEN" \
+    -e DOCKER_INFLUXDB_INIT_PORT="$DOCKER_INFLUXDB_INIT_PORT" \
+    -e DOCKER_INFLUXDB_INIT_HOST="$DOCKER_INFLUXDB_INIT_HOST" \
+    	telegraf:1.25.0
 # End
 ```
 
