@@ -20,7 +20,10 @@ export DOCKER_INFLUXDB_INIT_BUCKET
 export DOCKER_INFLUXDB_INIT_HOST
 export DOCKER_INFLUXDB_INIT_PORT
 
-# Telegraf Setup
+# Docker Permissions Setup, to make these permissions persistent run docker-socket-permissions.sh
+chmod 666 /var/run/docker.sock
+
+# Telegraf Cinfiguration file Setup
 
 cat << EOF > ${PWD}/telegraf.conf
  [global_tags]
