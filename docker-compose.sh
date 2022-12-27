@@ -42,9 +42,9 @@ services:
     image: telegraf:1.25.0
     restart: unless-stopped
     volumes:
-      -v /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock
       - ${PWD}/telegraf.conf:/etc/telegraf/telegraf.conf:rw
-      -v /:/hostfs:ro
+      - /:/hostfs:ro
     environment:
       - HOST_ETC=/hostfs/etc
       - HOST_PROC=/hostfs/proc
